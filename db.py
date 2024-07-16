@@ -1,5 +1,7 @@
 import psycopg2
 from models import UserRole, UserStatus
+from session import Session
+from utils import Response
 
 data_case = {
     'database': 'todo_project',
@@ -57,6 +59,19 @@ def commit(func):
     def wrapper(*args, **kwargs):
         result = func(*args, **kwargs)
         conn.commit()
+        return result
+
+    return wrapper
+
+
+session = Session()
+
+
+def is_authenticated(func):
+    def wrapper(*args, **kwargs):
+        if not session.session:
+            return Response('Not authenticated', status_code=404)
+        result = func(*args, **kwargs)
         return result
 
     return wrapper

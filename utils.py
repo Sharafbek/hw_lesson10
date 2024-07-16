@@ -13,3 +13,4 @@ def hash_password(raw_password):
 
 def match_password(raw_password, encoded_password):
     return hash_password(raw_password) == encoded_password
+
